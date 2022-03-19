@@ -1,0 +1,19 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+
+
+spring:
+  application:
+    name: "user-api"
+  h2:
+    console:
+      enabled: true
+
+chat:
+  queues:
+    output: "na"
+  exchanges:
+    output: "user-events"
