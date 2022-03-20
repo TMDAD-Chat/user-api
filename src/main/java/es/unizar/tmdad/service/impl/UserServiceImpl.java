@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
         entity = repository.save(entity);
 
         UserEvent event = UserEvent.builder()
-                .subject(entity.getId().toString())
+                .subject(entity.getName())
                 .event(EventType.ADD_USER)
                 .build();
         rabbitService.sendEvent(event);
@@ -39,18 +39,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUser(String id) {
-        return repository.findById(id)
+    public UserDto getUser(String name) {
+        return repository.findById(name)
                 .map(mapper::mapUser)
-                .orElseThrow(() -> new RuntimeException("NOT FOUND: Error getting user with id " + id + "."));
+                .orElseThrow(() -> new RuntimeException("NOT FOUND: Error getting user with name " + name + "."));
     }
 
     @Override
-    public void deleteUser(String id) {
-        repository.deleteById(id);
+    public void deleteUser(String name) {
+        repository.deleteById(name);
 
         UserEvent event = UserEvent.builder()
-                .subject(id)
+                .subject(name)
                 .event(EventType.DELETE_USER)
                 .build();
         rabbitService.sendEvent(event);

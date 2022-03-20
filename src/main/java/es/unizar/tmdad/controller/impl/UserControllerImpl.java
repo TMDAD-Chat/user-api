@@ -18,21 +18,22 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    @PostMapping
-    public UserDto createUser(@RequestBody UserCreationDto userDto) {
+    @PutMapping("/{name}")
+    public UserDto createUser(@PathVariable String name, @RequestBody UserCreationDto userDto) {
+        userDto.setUserName(name);
         return userService.addUser(userDto);
     }
 
     @Override
     @DeleteMapping
-    public void deleteUser(String userId) {
-        userService.deleteUser(userId);
+    public void deleteUser(String name) {
+        userService.deleteUser(name);
     }
 
     @Override
-    @GetMapping("/{id}")
-    public UserDto getUser(@PathVariable("id") String userId) {
-        return userService.getUser(userId);
+    @GetMapping("/{name}")
+    public UserDto getUser(@PathVariable("name") String name) {
+        return userService.getUser(name);
     }
 
 }
