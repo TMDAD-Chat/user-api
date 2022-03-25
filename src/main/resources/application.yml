@@ -13,7 +13,5 @@ spring:
       enabled: true
 
 chat:
-  queues:
-    output: "na"
   exchanges:
     output: "user-events"
