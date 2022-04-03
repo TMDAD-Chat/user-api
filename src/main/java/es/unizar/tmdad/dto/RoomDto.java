@@ -1,13 +1,17 @@
 package es.unizar.tmdad.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Builder
 public class RoomDto {
 
-    private String id;
-    private String userName;
-    private Boolean isSuperUser;
+    private Long id;
+    private String name;
+    private String owner;
+    private List<String> users;
 
 }

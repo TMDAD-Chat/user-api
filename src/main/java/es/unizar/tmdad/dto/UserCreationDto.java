@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 public class UserCreationDto {
     
-    private String userName;
+    private String name;
 
 }

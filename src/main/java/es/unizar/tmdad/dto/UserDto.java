@@ -7,8 +7,7 @@ import lombok.Data;
 @Builder
 public class UserDto {
 
-    private String id;
-    private String userName;
+    private String name;
     private Boolean isSuperUser;
 
 }

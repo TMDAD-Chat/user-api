@@ -20,7 +20,7 @@ public class UserControllerImpl implements UserController {
     @Override
     @PutMapping("/{name}")
     public UserDto createUser(@PathVariable String name, @RequestBody UserCreationDto userDto) {
-        userDto.setUserName(name);
+        userDto.setName(name);
         return userService.addUser(userDto);
     }
 

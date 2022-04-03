@@ -1,8 +1,19 @@
 package es.unizar.tmdad.repository.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity(name = "user")
 @Getter
@@ -18,4 +29,15 @@ public class UserEntity {
     @Column(name = "superuser")
     private Boolean isSuperUser;
 
+    @ManyToMany(mappedBy = "users")
+    @ToString.Exclude
+    private Set<RoomEntity> rooms = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        UserEntity that = (UserEntity) o;
+        return name != null && Objects.equals(name, that.name);
+    }
 }
