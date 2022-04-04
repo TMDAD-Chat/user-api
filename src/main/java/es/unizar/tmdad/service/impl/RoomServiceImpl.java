@@ -41,6 +41,7 @@ public class RoomServiceImpl implements RoomService {
         UserEvent event = UserEvent.builder()
                 .subject(String.valueOf(entity.getId()))
                 .event(EventType.ADD_ROOM)
+                .argument(owner)
                 .build();
         rabbitService.sendEvent(event);
 

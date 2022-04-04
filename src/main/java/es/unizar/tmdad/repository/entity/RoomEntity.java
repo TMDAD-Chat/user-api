@@ -21,7 +21,7 @@ import javax.persistence.SequenceGenerator;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "room")
+@Entity(name = "rooms")
 @Getter
 @Setter
 @ToString
@@ -31,7 +31,7 @@ public class RoomEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "room_id_generator")
     @SequenceGenerator(name = "room_id_generator", sequenceName = "room_id_sequence", allocationSize = 1)
-    @Column(name = "name", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
 
@@ -39,13 +39,13 @@ public class RoomEntity {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_name", nullable = false)
+    @JoinColumn(name = "owner_name", nullable = false)
     @ToString.Exclude
     private UserEntity owner;
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
-            name = "room_users",
+            name = "rooms_users",
             joinColumns = { @JoinColumn(name = "room_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )

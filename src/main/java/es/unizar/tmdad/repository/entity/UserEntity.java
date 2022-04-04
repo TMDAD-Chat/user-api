@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Entity(name = "user")
+@Entity(name = "users")
 @Getter
 @Setter
 @ToString
