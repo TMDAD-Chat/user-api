@@ -2,12 +2,13 @@ package es.unizar.tmdad.controller;
 
 import es.unizar.tmdad.dto.RoomCreationDto;
 import es.unizar.tmdad.dto.RoomDto;
-import org.springframework.http.ResponseEntity;
 
 public interface RoomController {
 
-    ResponseEntity<RoomDto> createRoom(RoomCreationDto dto);
-    void deleteRoom(String userId);
-    ResponseEntity<RoomDto> getRoom(String userId);
+    RoomDto createRoom(RoomCreationDto dto, String owner);
+    void deleteRoom(Long roomId);
+    RoomDto getRoom(Long roomId);
+    RoomDto addUserToRoom(Long roomId, String user, String owner);
+    RoomDto removeUserFromRoom(Long roomId, String user, String owner);
 
 }

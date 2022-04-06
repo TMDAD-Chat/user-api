@@ -11,6 +11,8 @@ import es.unizar.tmdad.service.RabbitService;
 import es.unizar.tmdad.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -43,6 +45,11 @@ public class UserServiceImpl implements UserService {
         return repository.findById(name)
                 .map(mapper::mapUser)
                 .orElseThrow(() -> new RuntimeException("NOT FOUND: Error getting user with name " + name + "."));
+    }
+
+    @Override
+    public Optional<UserEntity> getUserEntity(String id) {
+        return repository.findById(id);
     }
 
     @Override

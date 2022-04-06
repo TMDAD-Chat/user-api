@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 public class RoomCreationDto {
     
-    private String userName;
+    private String roomName;
 
 }
