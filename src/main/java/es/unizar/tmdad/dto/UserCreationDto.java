@@ -9,5 +9,7 @@ import lombok.*;
 public class UserCreationDto {
     
     private String name;
+    private String email;
+    private String photoUri;
 
 }

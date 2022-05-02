@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
         entity = repository.save(entity);
 
         UserEvent event = UserEvent.builder()
-                .subject(entity.getName())
+                .subject(entity.getEmail())
                 .event(EventType.ADD_USER)
                 .build();
         rabbitService.sendEvent(event);

@@ -9,5 +9,7 @@ public class UserDto {
 
     private String name;
     private Boolean isSuperUser;
+    private String email;
+    private String photoUri;
 
 }
