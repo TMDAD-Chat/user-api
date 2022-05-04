@@ -22,12 +22,20 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserEntity {
+
     @Id
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "photo", nullable = false)
+    private String photoUri;
+
     @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "superuser")
     private Boolean isSuperUser;
+
 
     @ManyToMany(mappedBy = "users")
     @ToString.Exclude

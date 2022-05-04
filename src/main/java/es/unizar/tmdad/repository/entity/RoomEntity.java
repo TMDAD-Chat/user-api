@@ -39,7 +39,7 @@ public class RoomEntity {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "owner_name", nullable = false)
+    @JoinColumn(name = "owner_email", nullable = false)
     @ToString.Exclude
     private UserEntity owner;
 
