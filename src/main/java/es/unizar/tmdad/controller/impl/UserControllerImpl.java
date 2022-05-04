@@ -26,9 +26,6 @@ public class UserControllerImpl implements UserController {
     @Override
     @PutMapping(value = "/{email}", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public UserDto createUser(@PathVariable String email, @RequestBody UserCreationDto userDto) {
-        userDto.setName(userDto.getName());
-        userDto.setEmail(userDto.getEmail());
-        userDto.setPhotoUri(userDto.getPhotoUri());
         return userService.addUser(userDto);
     }
 
