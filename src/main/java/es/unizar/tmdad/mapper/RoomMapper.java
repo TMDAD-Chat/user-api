@@ -2,12 +2,11 @@ package es.unizar.tmdad.mapper;
 
 import es.unizar.tmdad.dto.RoomCreationDto;
 import es.unizar.tmdad.dto.RoomDto;
+import es.unizar.tmdad.dto.UserDto;
 import es.unizar.tmdad.repository.entity.RoomEntity;
 import es.unizar.tmdad.repository.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
-import java.util.Objects;
 
 @Mapper(componentModel = "spring")
 public interface RoomMapper {
@@ -18,8 +17,9 @@ public interface RoomMapper {
 
     RoomDto mapRoom(RoomEntity msg);
 
-    default String mapUserToId(UserEntity entity){
+    /*default String mapUserToId(UserEntity entity){
         return Objects.nonNull(entity) ? entity.getName() : null;
-    }
+    }*/
+    UserDto mapUserToId(UserEntity entity);
 
 }

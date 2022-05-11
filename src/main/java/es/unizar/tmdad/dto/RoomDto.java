@@ -11,7 +11,7 @@ public class RoomDto {
 
     private Long id;
     private String name;
-    private String owner;
-    private List<String> users;
+    private UserDto owner;
+    private List<UserDto> users;
 
 }

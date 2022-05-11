@@ -30,9 +30,9 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    @DeleteMapping
-    public void deleteUser(String name) {
-        userService.deleteUser(name);
+    @DeleteMapping(value = "/{email}")
+    public void deleteUser(@PathVariable String email) {
+        userService.deleteUser(email);
     }
 
     @Override

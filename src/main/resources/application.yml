@@ -4,6 +4,16 @@ management:
       exposure:
         include: health,prometheus
 
+server:
+  port: 8443
+  http2:
+    enabled: true
+  ssl:
+    key-store: /opt/user-api.p12
+    key-store-password: user-api
+    key-store-type: pkcs12
+    key-alias: user-api
+    key-password: user-api
 
 spring:
   application:
