@@ -5,6 +5,7 @@ import es.unizar.tmdad.dto.UserCreationDto;
 import es.unizar.tmdad.repository.entity.UserEntity;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface UserService {
 
@@ -12,5 +13,6 @@ public interface UserService {
     UserDto getUser(String id);
     Optional<UserEntity> getUserEntity(String id);
     void deleteUser(String id);
-
+    UserDto addContact(String email, String contact);
+    Set<UserDto> getContacts(String email);
 }
