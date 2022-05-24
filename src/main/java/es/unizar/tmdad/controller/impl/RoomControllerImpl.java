@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/room")
 public class RoomControllerImpl implements RoomController {
@@ -52,5 +54,11 @@ public class RoomControllerImpl implements RoomController {
     @DeleteMapping("/{roomId}/user/{userId}")
     public RoomDto removeUserFromRoom(@PathVariable("roomId") Long roomId, @PathVariable("userId") String userId, @RequestParam("owner") String owner) {
         return this.roomService.modifyUserInRoom(roomId, userId, owner, RoomService.Operation.REMOVE);
+    }
+
+    @Override
+    @GetMapping("/list/{email}")
+    public List<RoomDto> getRoomList(@PathVariable("email") String userEmail) {
+        return this.roomService.getUserRooms(userEmail);
     }
 }

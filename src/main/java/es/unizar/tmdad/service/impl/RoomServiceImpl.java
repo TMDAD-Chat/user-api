@@ -13,6 +13,7 @@ import es.unizar.tmdad.service.RoomService;
 import es.unizar.tmdad.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -53,6 +54,11 @@ public class RoomServiceImpl implements RoomService {
         return repository.findById(id)
                 .map(mapper::mapRoom)
                 .orElseThrow(() -> new RuntimeException("NOT FOUND: Error getting room with id " + id + "."));
+    }
+
+    @Override
+    public List<RoomDto> getUserRooms(String email) {
+        return mapper.mapRoomEntities(repository.findAllUserRooms(email));
     }
 
     @Override
