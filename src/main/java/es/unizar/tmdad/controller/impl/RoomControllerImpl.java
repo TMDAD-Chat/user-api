@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/room")
@@ -24,8 +25,8 @@ public class RoomControllerImpl implements RoomController {
     }
 
     @Override
-    @PostMapping
-    public RoomDto createRoom(RoomCreationDto dto, @RequestParam("owner") String owner) {
+    @PostMapping("/{owner}")
+    public RoomDto createRoom(@RequestBody RoomCreationDto dto, @PathVariable("owner") String owner) {
         return this.roomService.addRoom(dto, owner);
     }
 
