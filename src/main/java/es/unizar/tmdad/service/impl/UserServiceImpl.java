@@ -30,6 +30,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto addUser(UserCreationDto userDto) {
+        UserEntity user = this.getUserEntity(userDto.getEmail()).orElse(null);
+        if(user != null) return mapper.mapUser(user);
+
         UserEntity entity = mapper.mapUser(userDto);
         entity = repository.save(entity);
 
