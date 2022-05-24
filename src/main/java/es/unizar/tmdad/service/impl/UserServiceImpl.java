@@ -12,6 +12,8 @@ import es.unizar.tmdad.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,6 +30,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto addUser(UserCreationDto userDto) {
+        UserEntity user = this.getUserEntity(userDto.getEmail()).orElse(null);
+        if(user != null) return mapper.mapUser(user);
+
         UserEntity entity = mapper.mapUser(userDto);
         entity = repository.save(entity);
 
@@ -42,6 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(String name) {
+
         return repository.findById(name)
                 .map(mapper::mapUser)
                 .orElseThrow(() -> new RuntimeException("NOT FOUND: Error getting user with name " + name + "."));
@@ -62,5 +68,27 @@ public class UserServiceImpl implements UserService {
                 .build();
         rabbitService.sendEvent(event);
 
+    }
+
+    @Override
+    public UserDto addContact(String email, String contact) {
+        UserEntity owner = this.getUserEntity(email).orElseThrow();
+        UserEntity newContact = this.getUserEntity(contact).orElseThrow();
+
+        owner.getContacts().add(newContact);
+        newContact.getContacts().add(owner);
+
+        this.repository.save(owner);
+
+        return mapper.mapUser(newContact);
+    }
+
+    public Set<UserDto> getContacts(String email) {
+        var contacts = repository.findById(email)
+                .map(UserEntity::getContacts)
+                .orElseThrow(() -> new RuntimeException("NOT FOUND: Error getting user with name " + email + "."));
+
+        return contacts.stream()
+                .map(mapper::mapUser).collect(Collectors.toSet());
     }
 }

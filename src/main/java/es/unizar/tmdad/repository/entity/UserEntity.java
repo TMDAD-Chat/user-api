@@ -7,10 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -48,4 +45,13 @@ public class UserEntity {
         UserEntity that = (UserEntity) o;
         return name != null && Objects.equals(name, that.name);
     }
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "user_conversation",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "second_user_id") }
+    )
+    @ToString.Exclude
+    Set<UserEntity> contacts = new HashSet<>();
 }

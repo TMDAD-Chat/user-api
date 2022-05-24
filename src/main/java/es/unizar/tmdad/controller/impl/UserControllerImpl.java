@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping(value = "/user")
 public class UserControllerImpl implements UserController {
@@ -41,4 +43,15 @@ public class UserControllerImpl implements UserController {
         return userService.getUser(name);
     }
 
+    @Override
+    @PutMapping("/{email}/contacts/{contact}")
+    public UserDto addContact(@PathVariable("email") String email, @PathVariable("contact") String contact) {
+        return userService.addContact(email, contact);
+    }
+
+    @Override
+    @GetMapping("/{email}/contacts")
+    public Set<UserDto> getContacts(@PathVariable("email") String email) {
+        return userService.getContacts(email);
+    }
 }
