@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 import java.util.List;
 
@@ -31,7 +28,7 @@ public class RoomControllerImpl implements RoomController {
     }
 
     @Override
-    @PostMapping("/")
+    @PostMapping
     public RoomDto createRoom(@RequestBody RoomCreationDto dto, @RequestHeader("X-Auth-User") String owner) {
         return this.roomService.addRoom(dto, owner);
     }

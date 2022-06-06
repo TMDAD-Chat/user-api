@@ -14,13 +14,16 @@ import es.unizar.tmdad.repository.entity.UserEntity;
 import es.unizar.tmdad.service.RabbitService;
 import es.unizar.tmdad.service.RoomService;
 import es.unizar.tmdad.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository repository;
@@ -61,7 +64,11 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomDto> getUserRooms(String email) {
-        return mapper.mapRoomEntities(repository.findAllUserRooms(email));
+        var user = this.userService.getUserEntity(email).orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.EntityType.USER, email));
+        var rooms = new ArrayList<>(user.getRooms());
+        rooms.addAll(repository.findAllByOwner(user));
+        log.info("Retrieved {} rooms for user {}", rooms.size(), email);
+        return mapper.mapRoomEntities(rooms);
     }
 
     @Override
