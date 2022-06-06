@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import java.util.List;
+
 public interface RoomController {
 
     @Operation(description = "Create a new room",
@@ -75,5 +77,5 @@ public interface RoomController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Rooms of the user were retrieved successfully")
     })
-
+    List<RoomDto> getRoomList(String userEmail);
 }

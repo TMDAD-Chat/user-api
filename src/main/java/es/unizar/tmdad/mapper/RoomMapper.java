@@ -8,6 +8,8 @@ import es.unizar.tmdad.repository.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface RoomMapper {
 
@@ -22,4 +24,5 @@ public interface RoomMapper {
     }*/
     UserDto mapUserToId(UserEntity entity);
 
+    List<RoomDto> mapRoomEntities(List<RoomEntity> rooms);
 }
