@@ -4,6 +4,7 @@ import es.unizar.tmdad.adt.EventType;
 import es.unizar.tmdad.adt.UserEvent;
 import es.unizar.tmdad.dto.*;
 import es.unizar.tmdad.dto.UserCreationDto;
+import es.unizar.tmdad.exception.EntityNotFoundException;
 import es.unizar.tmdad.mapper.UserMapper;
 import es.unizar.tmdad.repository.UserRepository;
 import es.unizar.tmdad.repository.entity.UserEntity;
@@ -50,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
         return repository.findById(name)
                 .map(mapper::mapUser)
-                .orElseThrow(() -> new RuntimeException("NOT FOUND: Error getting user with name " + name + "."));
+                .orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.EntityType.USER, "NOT FOUND: Error getting user with name " + name + "."));
     }
 
     @Override
@@ -83,6 +84,7 @@ public class UserServiceImpl implements UserService {
         return mapper.mapUser(newContact);
     }
 
+    @Override
     public Set<UserDto> getContacts(String email) {
         var contacts = repository.findById(email)
                 .map(UserEntity::getContacts)
@@ -90,5 +92,23 @@ public class UserServiceImpl implements UserService {
 
         return contacts.stream()
                 .map(mapper::mapUser).collect(Collectors.toSet());
+    }
+
+    @Override
+    public UserDto updateSuperuserFlagOf(String email, Boolean makeSuperuser) {
+        var user = repository.findById(email).orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.EntityType.USER, email));
+        if(!user.getIsSuperUser().equals(makeSuperuser)) {
+            user.setIsSuperUser(makeSuperuser);
+            user = repository.save(user);
+
+            UserEvent event = UserEvent.builder()
+                    .subject(email)
+                    .event(EventType.UPDATE_USER_SU_FLAG)
+                    .argument(String.valueOf(makeSuperuser))
+                    .build();
+            rabbitService.sendEvent(event);
+        }
+
+        return mapper.mapUser(user);
     }
 }

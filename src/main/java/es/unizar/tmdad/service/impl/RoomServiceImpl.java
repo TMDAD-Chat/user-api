@@ -4,6 +4,9 @@ import es.unizar.tmdad.adt.EventType;
 import es.unizar.tmdad.adt.UserEvent;
 import es.unizar.tmdad.dto.RoomCreationDto;
 import es.unizar.tmdad.dto.RoomDto;
+import es.unizar.tmdad.exception.EntityNotFoundException;
+import es.unizar.tmdad.exception.UnauthorizedException;
+import es.unizar.tmdad.exception.UserNotTheOwnerException;
 import es.unizar.tmdad.mapper.RoomMapper;
 import es.unizar.tmdad.repository.RoomRepository;
 import es.unizar.tmdad.repository.entity.RoomEntity;
@@ -11,12 +14,16 @@ import es.unizar.tmdad.repository.entity.UserEntity;
 import es.unizar.tmdad.service.RabbitService;
 import es.unizar.tmdad.service.RoomService;
 import es.unizar.tmdad.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository repository;
@@ -52,11 +59,24 @@ public class RoomServiceImpl implements RoomService {
     public RoomDto getRoom(Long id) {
         return repository.findById(id)
                 .map(mapper::mapRoom)
-                .orElseThrow(() -> new RuntimeException("NOT FOUND: Error getting room with id " + id + "."));
+                .orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.EntityType.ROOM, "NOT FOUND: Error getting room with id " + id + "."));
     }
 
     @Override
-    public void deleteRoom(Long id) {
+    public List<RoomDto> getUserRooms(String email) {
+        var user = this.userService.getUserEntity(email).orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.EntityType.USER, email));
+        var rooms = new ArrayList<>(user.getRooms());
+        rooms.addAll(repository.findAllByOwner(user));
+        log.info("Retrieved {} rooms for user {}", rooms.size(), email);
+        return mapper.mapRoomEntities(rooms);
+    }
+
+    @Override
+    public void deleteRoom(Long id, String owner) throws UnauthorizedException {
+        var room = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.EntityType.ROOM, String.valueOf(id)));
+        if(!Objects.equals(owner, room.getOwner().getEmail())){
+            throw new UnauthorizedException("User ("+owner+") is not the owner of the room, so he cannot delete it.");
+        }
         repository.deleteById(id);
 
         UserEvent event = UserEvent.builder()
@@ -74,7 +94,7 @@ public class RoomServiceImpl implements RoomService {
         UserEntity user = this.userService.getUserEntity(userId).orElseThrow();
 
         if(!Objects.equals(room.getOwner(), owner)){
-            throw new RuntimeException("Cannot add user to room if not the owner.");
+            throw new UserNotTheOwnerException("Cannot add user to room if not the owner.");
         }
 
         switch (op){

@@ -15,4 +15,6 @@ public interface UserService {
     void deleteUser(String id);
     UserDto addContact(String email, String contact);
     Set<UserDto> getContacts(String email);
+
+    UserDto updateSuperuserFlagOf(String email, Boolean makeSuperuser);
 }
